@@ -9,6 +9,8 @@ var createCharac = function(name, pv, tex){
     var texture = tex;
     var pos = {x:0,y:0};
 
+
+
     var getDamage = function (qt) {
         pv = pv-qt
         if (pv<=0) {
@@ -45,7 +47,7 @@ var createCharac = function(name, pv, tex){
     return self
 }
 
-var createRenderEngine = function (canvasTarget) {
+var createRenderEngine3d = function (canvasTarget) {
     var self = {};
     var posInit =100;
     var posY =200;
@@ -57,10 +59,43 @@ var createRenderEngine = function (canvasTarget) {
     var img = new Image()
     img.src ="./img/pc.png"
     console.log(img);
+    //VARIABLE GLOBAL THREEJS
+    var scene = undefined;
+    var camera = undefined;
+    var lamp= undefined;
+    var mesh = undefined;
+    var cube = undefined;
+    var renderer = undefined;
+
+    var createEnv = function(){
+        scene = new THREE.Scene()
+        camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000 )
+        renderer = new THREE.WebGLRenderer()
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        document.body.appendChild(renderer.domElement)
+        renderer.render(scene, camera)
+
+        //create the cube
+        var geometry = new THREE.BoxGeometry(1,1,1)
+        var material = new THREE.MeshBasicMaterial(
+            {color:0x00ff00}
+        )
+        cube = new THREE.Mesh(geometry,material)
+        scene.add(cube)
+
+        // cube.rotation.x =0.5
+        // cube.rotation.y =0.8
+
+
+        camera.position.z =5 
+        //renderer.render(scene, camera)
+
+    }
 
     var init = function () {
         var canvas = document.querySelector(canvasTarget)
         var ctx = canvas.getContext("2d");
+        createEnv();
         // ctx.fillStyle ="red"
         // ctx.fillRect(25,5,100,10);
         // ctx.fillStyle ="blue"
@@ -71,6 +106,7 @@ var createRenderEngine = function (canvasTarget) {
             console.log(event);
             if (event.key =="d") {
                 state ="right" 
+                cube.rotation.x = cube.rotation.x+0.1
             }
             if (event.key =="q") {
                 state ="left"
@@ -95,6 +131,9 @@ var createRenderEngine = function (canvasTarget) {
             ctx.fillStyle ="green"
             ctx.drawImage(img, posInit,posY)
             //ctx.fillRect(posInit,posY,-50,50);
+
+            //update three render
+            renderer.render(scene, camera)
         }
 
         var process = function() {
@@ -144,4 +183,5 @@ var createRenderEngine = function (canvasTarget) {
     return self
 }
 
-export {createCharac,createRenderEngine}
+export {createRenderEngine3d}
+//export {createCharac,createRenderEngine}

@@ -1,5 +1,6 @@
 import { startDialogue } from "./exo.js";
 import { createCharac, createRenderEngine } from "./render2d.js";
+import { createRenderEngine3d } from "./render3d.js";
 import {minus, add} from "./utils.js";
 
 //startDialogue()
@@ -7,4 +8,5 @@ import {minus, add} from "./utils.js";
 var martine = createCharac("martine",100,"./img/pc.png")
 var pyta = createCharac("pyta",100)
 
-createRenderEngine(".render2d")
+//createRenderEngine(".renderTarget")
+createRenderEngine3d(".renderTarget")
