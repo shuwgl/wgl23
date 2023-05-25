@@ -57,9 +57,17 @@ var createRenderEngine = function (canvasTarget) {
         var onKeydown = function (event) {
             console.log(event);
             if (event.key =="d") {
+                ctx.clearRect(0,0,canvas.width, canvas.height)
                 posInit = posInit+1 
                 ctx.fillStyle ="blue"
-                ctx.fillRect(posInit,50,5,50);
+                ctx.fillRect(posInit,50,50,50);
+                
+            }
+            if (event.key =="q") {
+                ctx.clearRect(0,0,canvas.width, canvas.height)
+                posInit = posInit-1 
+                ctx.fillStyle ="green"
+                ctx.fillRect(posInit,50,-50,50);
             }
             //A ajouter ici
         }
