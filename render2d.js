@@ -44,8 +44,12 @@ var createCharac = function(name, pv, tex){
 var createRenderEngine = function (canvasTarget) {
     var self = {};
     var posInit =100;
-    var state = "right"
+    var posY =200;
+    var state = undefined;
+    var isJumping =false;
+    var isFalling =false;
     var speed =1
+    var jumpSpeed =5
 
     var init = function () {
         var canvas = document.querySelector(canvasTarget)
@@ -58,22 +62,31 @@ var createRenderEngine = function (canvasTarget) {
 
         var onKeydown = function (event) {
             console.log(event);
-
             if (event.key =="d") {
-                state ="right"
-                
+                state ="right" 
             }
             if (event.key =="q") {
                 state ="left"
             }
-            //A ajouter ici
+            if (event.key =="z" && isJumping == false && isFalling == false) {
+                isJumping = true
+            }
+        }
+        var onKeyup = function (event) { //trigger when the keyboard key is up
+            console.log(event);
+            if (event.key =="d") {
+                state =undefined
+            }
+            if (event.key =="q") {
+                state =undefined
+            }
         }
 
         var render=function () {
             ctx.clearRect(0,0,canvas.width, canvas.height)
             //posInit = posInit+1 
             ctx.fillStyle ="green"
-            ctx.fillRect(posInit,50,-50,50);
+            ctx.fillRect(posInit,posY,-50,50);
         }
 
         var process = function() {
@@ -82,6 +95,20 @@ var createRenderEngine = function (canvasTarget) {
             }
             if (state == "left") {
                 posInit = posInit-speed
+            }
+            if (isJumping) {
+                posY = posY-jumpSpeed
+                if (posY <50) {
+                    isJumping = false;
+                    isFalling = true;
+                }
+            }
+            if (isFalling) {
+                posY = posY+jumpSpeed
+                if (posY >200) {
+                    isJumping = false;
+                    isFalling = false;
+                }
             }
             // Définir ici une mise à jour de "poseInit" selon que le state du cube soit
             //"right" ou "left"
@@ -99,6 +126,7 @@ var createRenderEngine = function (canvasTarget) {
         renderFrame()
 
         document.addEventListener("keydown", onKeydown)
+        document.addEventListener("keyup", onKeyup)
     }
 
     init()
