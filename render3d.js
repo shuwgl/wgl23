@@ -1,6 +1,9 @@
 import * as THREE from "three"
+import {GLTFLoader } from "three/addons/loaders/GLTFLoader.js"
+
 
 console.log(THREE);
+console.log(GLTFLoader);
 
 var createCharac = function(name, pv, tex){
     var self ={};
@@ -70,9 +73,10 @@ var createRenderEngine3d = function (canvasTarget) {
     var renderer = undefined;
 
     var createEnv = function(){
+        
         scene = new THREE.Scene()
         camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000 )
-        renderer = new THREE.WebGLRenderer()
+        renderer = new THREE.WebGLRenderer({alpha:true})
         renderer.setSize(window.innerWidth, window.innerHeight)
         document.body.appendChild(renderer.domElement)
         renderer.render(scene, camera)
@@ -87,12 +91,29 @@ var createRenderEngine3d = function (canvasTarget) {
 
         // cube.rotation.x =0.5
         // cube.rotation.y =0.8
-
-
+        
+        var light = new THREE.AmbientLight(0x404040)
+        
+        scene.add(light)
+        
         camera.position.z =5 
+        importScene()
         //renderer.render(scene, camera)
 
     }
+
+    var importScene = function () {
+        var loader = new GLTFLoader()
+        var onImport = function (gltf) {
+            gltf.scene.position.y = -5
+            gltf.scene.rotation.x = 0.2
+            console.log(gltf);
+            scene.add(gltf.scene)
+        }
+        loader.load("./img/tjs.gltf", onImport)
+    }
+
+
 
     var init = function () {
         var canvas = document.querySelector(canvasTarget)
