@@ -72,12 +72,17 @@ var createRenderEngine3d = function (canvasTarget) {
     var cube = undefined;
     var renderer = undefined;
 
+    //VARIABLE GLOBAL PC
+    var mapRight = undefined;
+    var mapLeft = undefined;
+
     var createEnv = function(){
         
         scene = new THREE.Scene()
         camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000 )
         renderer = new THREE.WebGLRenderer({alpha:true})
         renderer.setSize(window.innerWidth, window.innerHeight)
+        renderer.shadowMap.enabled = true;
         document.body.appendChild(renderer.domElement)
         renderer.render(scene, camera)
 
@@ -89,14 +94,30 @@ var createRenderEngine3d = function (canvasTarget) {
         
         cube = new THREE.Mesh(geometry,material)
 
+
+        /// Change cube to sprite
+        mapRight = new THREE.TextureLoader().load( './img/pc.png' );
+        mapLeft = new THREE.TextureLoader().load( './img/pc2.png' );
+        const materialSprite = new THREE.SpriteMaterial( { map: mapRight } );
+
+        cube = new THREE.Sprite( materialSprite );
+
+        cube.material.map = mapLeft
+
+
         scene.add(cube)
         
         // cube.rotation.x =0.5
         // cube.rotation.y =0.8
-        
         var light = new THREE.AmbientLight(0x404040)
-        
         scene.add(light)
+
+        const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+        directionalLight.castShadow = true;
+        // directionalLight.position.x = 3
+        // directionalLight.position.y = 3
+        // directionalLight.shadow.bias =-0.0001
+        scene.add( directionalLight );
         
         camera.position.z =5 
         importScene()
@@ -106,9 +127,18 @@ var createRenderEngine3d = function (canvasTarget) {
 
     var importScene = function () {
         var loader = new GLTFLoader()
+        var addShadows = function (node) {
+            if (node.isMesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+            }
+        }
         var onImport = function (gltf) {
-            gltf.scene.position.y = -5
-            gltf.scene.rotation.x = 0.2
+            gltf.scene.position.y = -0.5
+            gltf.scene.rotation.y = (3.1416/2)
+            gltf.scene.
+            // gltf.scene.traverse(addShadows)
+            // gltf.scene.scale.set(0.5,0.5,0.5)
             console.log(gltf);
             scene.add(gltf.scene)
         }
@@ -166,12 +196,20 @@ var createRenderEngine3d = function (canvasTarget) {
                 posInit = posInit+speed
                 cube.position.x = cube.position.x + speed3d
                 camera.position.x = cube.position.x
+
+                if (cube.material.map != mapRight) {
+                    cube.material.map = mapRight
+                }
+                
                 
             }
             if (state == "left") {
                 posInit = posInit-speed
                 cube.position.x = cube.position.x - speed3d
                 camera.position.x = cube.position.x
+                if (cube.material.map != mapLeft) {
+                    cube.material.map = mapLeft
+                }
             }
             if (isJumping) {
                 posY = posY-jumpSpeed
