@@ -55,7 +55,9 @@ var createRenderEngine3d = function (canvasTarget) {
     var isJumping =false;
     var isFalling =false;
     var speed =1
+    var speed3d = 0.1
     var jumpSpeed =5
+    var jumpSpeed3d =0.3
     var img = new Image()
     img.src ="./img/pc.png"
     console.log(img);
@@ -106,7 +108,7 @@ var createRenderEngine3d = function (canvasTarget) {
             console.log(event);
             if (event.key =="d") {
                 state ="right" 
-                cube.rotation.x = cube.rotation.x+0.1
+                //cube.rotation.x = cube.rotation.x+0.1
             }
             if (event.key =="q") {
                 state ="left"
@@ -139,20 +141,25 @@ var createRenderEngine3d = function (canvasTarget) {
         var process = function() {
             if (state == "right") {
                 posInit = posInit+speed
+                cube.position.x = cube.position.x + speed3d
+                
             }
             if (state == "left") {
                 posInit = posInit-speed
+                cube.position.x = cube.position.x - speed3d
             }
             if (isJumping) {
                 posY = posY-jumpSpeed
-                if (posY <50) {
+                cube.position.y = cube.position.y + jumpSpeed3d
+                if (cube.position.y > 2) {
                     isJumping = false;
                     isFalling = true;
                 }
             }
             if (isFalling) {
                 posY = posY+jumpSpeed
-                if (posY >200) {
+                cube.position.y = cube.position.y - jumpSpeed3d
+                if (cube.position.y <0) {
                     isJumping = false;
                     isFalling = false;
                 }
@@ -174,6 +181,7 @@ var createRenderEngine3d = function (canvasTarget) {
 
         document.addEventListener("keydown", onKeydown)
         document.addEventListener("keyup", onKeyup)
+        document.addEventListener("mousedown", onKeyup)
     }
 
     init()
