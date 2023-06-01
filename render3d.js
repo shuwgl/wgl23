@@ -116,12 +116,20 @@ var createRenderEngine3d = function (canvasTarget) {
         directionalLight.castShadow = true;
         directionalLight.position.x = 3
         directionalLight.position.y = 3
-        
+
         directionalLight.shadow.mapSize.width = 1024; // default
         directionalLight.shadow.mapSize.height = 1024; // default
         directionalLight.shadow.camera.near = 0.05; // default
-        directionalLight.shadow.camera.far = 50000; // default
-        directionalLight.shadow.bias =-0.000001
+        directionalLight.shadow.camera.far = 50; // default
+        directionalLight.shadow.camera.right = 1; // default
+        directionalLight.shadow.camera.top = 40;
+        directionalLight.shadow.camera.bottom = - 40;
+        directionalLight.shadow.camera.left = - 40;
+        directionalLight.shadow.camera.right = 40;
+        directionalLight.shadow.camera.near = 0.1;
+        directionalLight.shadow.camera.far = 80;
+        // directionalLight.shadow.camera.left = 5; // default
+        directionalLight.shadow.bias =-0.01
 
         scene.add( directionalLight );
         
