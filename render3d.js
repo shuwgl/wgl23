@@ -114,8 +114,8 @@ var createRenderEngine3d = function (canvasTarget) {
 
         const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
         directionalLight.castShadow = true;
-        // directionalLight.position.x = 3
-        // directionalLight.position.y = 3
+        directionalLight.position.x = 3
+        directionalLight.position.y = 3
         // directionalLight.shadow.bias =-0.0001
         scene.add( directionalLight );
         
@@ -136,7 +136,7 @@ var createRenderEngine3d = function (canvasTarget) {
         var onImport = function (gltf) {
             gltf.scene.position.y = -0.5
             gltf.scene.rotation.y = (3.1416/2)
-            gltf.scene.
+            gltf.scene.traverse(addShadows)
             // gltf.scene.traverse(addShadows)
             // gltf.scene.scale.set(0.5,0.5,0.5)
             console.log(gltf);
