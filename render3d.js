@@ -86,9 +86,11 @@ var createRenderEngine3d = function (canvasTarget) {
         var material = new THREE.MeshBasicMaterial(
             {color:0x00ff00}
         )
+        
         cube = new THREE.Mesh(geometry,material)
-        scene.add(cube)
 
+        scene.add(cube)
+        
         // cube.rotation.x =0.5
         // cube.rotation.y =0.8
         
@@ -163,11 +165,13 @@ var createRenderEngine3d = function (canvasTarget) {
             if (state == "right") {
                 posInit = posInit+speed
                 cube.position.x = cube.position.x + speed3d
+                camera.position.x = cube.position.x
                 
             }
             if (state == "left") {
                 posInit = posInit-speed
                 cube.position.x = cube.position.x - speed3d
+                camera.position.x = cube.position.x
             }
             if (isJumping) {
                 posY = posY-jumpSpeed
